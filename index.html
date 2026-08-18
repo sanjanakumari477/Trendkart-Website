@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrendKart — Curated Fashion Finds</title>
+<link rel="icon" type="image/jpeg" href="images/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c1116;
+    --plum:#2c1620;
+    --plum-deep:#170b10;
+    --gold:#c8a44d;
+    --gold-soft:#e4cd94;
+    --rose:#c98a92;
+    --paper:#f7f0e8;
+    --paper-dim:#efe4d6;
+    --line: rgba(200,164,77,0.28);
+    --shadow: 0 20px 40px -20px rgba(23,11,16,0.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  .display{font-family:'Fraunces', serif;}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(22px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes floatY{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-9px);}
+  }
+  @keyframes spinSlow{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  @keyframes glowPulse{
+    0%,100%{ box-shadow:0 0 0px rgba(200,164,77,0.0), 0 0 18px rgba(200,164,77,0.35); }
+    50%{ box-shadow:0 0 0px rgba(200,164,77,0.0), 0 0 30px rgba(200,164,77,0.65); }
+  }
+  @keyframes shimmer{
+    0%{background-position:-400px 0;}
+    100%{background-position:400px 0;}
+  }
+  @keyframes marquee{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- Preloader ---------- */
+  #preloader{
+    position:fixed; inset:0; z-index:999;
+    background:var(--plum-deep);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:16px;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #preloader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+  #preloader img{
+    width:84px; height:84px; border-radius:50%;
+    animation: spinSlow 2.2s linear infinite, glowPulse 1.6s ease-in-out infinite;
+  }
+  #preloader .loader-text{
+    color:var(--gold-soft);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:14px;
+    letter-spacing:1px;
+  }
+
+  /* ---------- Back to top ---------- */
+  #backToTop{
+    position:fixed; right:24px; bottom:24px; z-index:60;
+    width:46px; height:46px; border-radius:50%;
+    background:var(--gold); color:var(--plum-deep);
+    display:flex; align-items:center; justify-content:center;
+    border:none; cursor:pointer;
+    box-shadow:0 10px 24px -8px rgba(0,0,0,0.4);
+    opacity:0; transform:translateY(14px); pointer-events:none;
+    transition: opacity .3s ease, transform .3s ease, background .2s ease;
+  }
+  #backToTop.show{opacity:1; transform:translateY(0); pointer-events:auto;}
+  #backToTop:hover{background:var(--gold-soft);}
+  #backToTop svg{width:18px;height:18px;}
+
+  /* ---------- Nav links ---------- */
+  .nav-links{
+    display:flex; gap:26px; font-size:14px; font-weight:500;
+  }
+  .nav-links a{position:relative; padding:4px 0; color:rgba(247,240,232,0.85); transition:color .2s ease;}
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px;
+    background:var(--gold); transition:width .25s ease;
+  }
+  .nav-links a:hover{color:var(--paper);}
+  .nav-links a:hover::after{width:100%;}
+
+  /* ---------- Trust bar ---------- */
+  .trust-bar{
+    max-width:1240px; margin:0 auto;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+    padding:34px 28px;
+    border-bottom:1px solid rgba(28,17,22,0.08);
+  }
+  .trust-item{
+    display:flex; align-items:center; gap:12px;
+    padding:0 18px;
+    border-left:1px solid rgba(28,17,22,0.08);
+  }
+  .trust-item:first-child{border-left:none; padding-left:0;}
+  .trust-item svg{width:26px; height:26px; color:var(--gold); flex:none;}
+  .trust-item .t-title{font-weight:600; font-size:14px;}
+  .trust-item .t-sub{font-size:12px; color:rgba(28,17,22,0.55);}
+
+  /* ---------- Testimonials ---------- */
+  .testimonials{
+    background:var(--plum);
+    color:var(--paper);
+    padding:70px 28px;
+    position:relative;
+    overflow:hidden;
+  }
+  .testimonials-inner{
+    max-width:760px; margin:0 auto; text-align:center;
+    position:relative; min-height:170px;
+  }
+  .testi-eyebrow{
+    color:var(--gold); font-size:13px; letter-spacing:3px; text-transform:uppercase;
+    font-weight:600; margin-bottom:18px;
+  }
+  .testi-slide{
+    position:absolute; inset:0;
+    opacity:0; transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+  }
+  .testi-slide.active{opacity:1; transform:translateY(0); pointer-events:auto; position:relative;}
+  .testi-slide p{
+    font-family:'Fraunces', serif; font-style:italic; font-size:22px; line-height:1.6;
+    color:var(--gold-soft); margin:0 0 16px;
+  }
+  .testi-slide .who{font-size:13px; color:rgba(247,240,232,0.65); font-weight:500;}
+  .testi-dots{display:flex; gap:8px; justify-content:center; margin-top:26px;}
+  .testi-dots button{
+    width:8px; height:8px; border-radius:50%; border:none;
+    background:rgba(247,240,232,0.3); cursor:pointer; padding:0;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .testi-dots button.active{background:var(--gold); transform:scale(1.3);}
+
+  /* ---------- Newsletter ---------- */
+  .newsletter{
+    max-width:1240px; margin:0 auto;
+    padding:70px 28px;
+    text-align:center;
+  }
+  .newsletter h2{font-family:'Fraunces', serif; font-size:30px; font-weight:500; margin:0 0 10px;}
+  .newsletter p{color:rgba(28,17,22,0.6); margin:0 0 26px; font-size:14.5px;}
+  .newsletter-form{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    max-width:440px; margin:0 auto;
+  }
+  .newsletter-form input{
+    flex:1; min-width:220px;
+    padding:13px 18px; border-radius:2px;
+    border:1px solid rgba(28,17,22,0.2);
+    font-family:'Work Sans',sans-serif; font-size:14px; outline:none;
+    transition:border-color .2s ease;
+  }
+  .newsletter-form input:focus{border-color:var(--gold);}
+  .newsletter-form button{
+    background:var(--plum); color:var(--paper);
+    border:none; padding:13px 26px; border-radius:2px;
+    font-weight:600; font-size:14px; cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .newsletter-form button:hover{background:var(--gold); color:var(--plum-deep); transform:translateY(-2px);}
+  .newsletter-msg{margin-top:14px; font-size:13.5px; min-height:18px; color:var(--gold); font-weight:500;}
+
+  /* ---------- Footer socials ---------- */
+  .social-row{display:flex; gap:12px; margin-top:16px;}
+  .social-row a{
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid rgba(247,240,232,0.25);
+    display:flex; align-items:center; justify-content:center;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+  .social-row a:hover{border-color:var(--gold); background:rgba(200,164,77,0.12); transform:translateY(-3px);}
+  .social-row svg{width:15px; height:15px;}
+
+  @media (max-width: 860px){
+    .nav-links{display:none;}
+    .trust-bar{grid-template-columns:1fr 1fr; gap:20px;}
+    .trust-item{border-left:none; padding:0;}
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--plum);
+    color:var(--paper);
+    border-bottom:1px solid var(--line);
+    transition: padding .3s ease, box-shadow .3s ease;
+  }
+  header.scrolled{
+    box-shadow:0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+  .header-inner{
+    max-width:1240px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 28px;
+    gap:20px;
+    transition: padding .3s ease;
+  }
+  header.scrolled .header-inner{ padding:9px 28px; }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:26px;
+    font-weight:600;
+    letter-spacing:0.5px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo span{color:var(--gold);font-style:italic;font-weight:500;}
+  .logo-badge{
+    height:44px; width:44px;
+    border-radius:50%;
+    object-fit:cover;
+    animation: floatY 4.5s ease-in-out infinite, glowPulse 3.5s ease-in-out infinite;
+    transition: height .3s ease, width .3s ease, transform .4s ease;
+  }
+  header.scrolled .logo-badge{ height:34px; width:34px; }
+  .logo-badge:hover{ transform: rotate(-8deg) scale(1.08); }
+  .tagline-strip{
+    background:var(--plum-deep);
+    color:var(--gold-soft);
+    font-size:12.5px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    font-weight:500;
+    overflow:hidden;
+    white-space:nowrap;
+    padding:8px 0;
+    position:relative;
+  }
+  .marquee-track{
+    display:inline-flex;
+    gap:60px;
+    animation: marquee 22s linear infinite;
+    padding-left:60px;
+  }
+  .marquee-track span{display:inline-flex; align-items:center; gap:10px;}
+  .marquee-track span::after{content:"✦"; color:var(--gold); margin-left:60px;}
+  .search-box{
+    flex:1; max-width:360px;
+    position:relative;
+  }
+  .search-box input{
+    width:100%;
+    background:rgba(247,240,232,0.08);
+    border:1px solid rgba(247,240,232,0.25);
+    border-radius:30px;
+    padding:10px 18px;
+    color:var(--paper);
+    font-family:'Work Sans',sans-serif;
+    font-size:14px;
+    outline:none;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .search-box input::placeholder{color:rgba(247,240,232,0.55);}
+  .search-box input:focus{border-color:var(--gold); background:rgba(247,240,232,0.14);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(200,164,77,0.16), transparent 55%),
+      radial-gradient(ellipse at 85% 80%, rgba(201,138,146,0.18), transparent 55%),
+      var(--plum);
+    color:var(--paper);
+    padding:80px 28px 64px;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1240px; margin:0 auto;
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap:40px; align-items:center;
+  }
+  .hero-eyebrow{
+    color:var(--gold);
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    font-weight:600;
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:12px;
+    animation: fadeUp .7s ease both;
+  }
+  .hero-eyebrow::before{content:"";width:34px;height:1px;background:var(--gold);}
+  .hero h1{
+    font-size:clamp(38px, 5vw, 62px);
+    line-height:1.05;
+    font-weight:500;
+    margin:0 0 22px;
+    animation: fadeUp .7s ease both .12s;
+  }
+  .hero h1 em{color:var(--gold-soft); font-style:italic; font-weight:500;}
+  .hero p{
+    font-size:16.5px;
+    line-height:1.7;
+    color:rgba(247,240,232,0.8);
+    max-width:480px;
+    margin:0 0 30px;
+    font-weight:300;
+    animation: fadeUp .7s ease both .24s;
+  }
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; animation: fadeUp .7s ease both .36s;}
+  .btn-primary{
+    background:var(--gold);
+    color:var(--plum-deep);
+    padding:14px 30px;
+    border-radius:2px;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.4px;
+    display:inline-block;
+    transition:transform .25s ease, box-shadow .25s ease;
+    border:1px solid var(--gold);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 24px -8px rgba(200,164,77,0.55);}
+  .btn-ghost{
+    padding:14px 26px;
+    border:1px solid rgba(247,240,232,0.35);
+    color:var(--paper);
+    border-radius:2px;
+    font-size:14px;
+    font-weight:500;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .btn-ghost:hover{border-color:var(--gold); background:rgba(200,164,77,0.08);}
+
+  .hero-visual{
+    position:relative;
+    display:grid; grid-template-columns:1fr 1fr; gap:14px;
+    height:420px;
+    animation: fadeUp .8s ease both .2s;
+  }
+  .hero-visual .stack{display:flex; flex-direction:column; gap:14px;}
+  .hero-visual .stack:nth-child(2){margin-top:44px;}
+  .hero-visual img{
+    width:100%; height:100%; object-fit:cover;
+    border-radius:2px;
+    box-shadow: var(--shadow);
+    border:1px solid var(--line);
+    transition: transform .5s ease;
+  }
+  .hero-visual img:hover{ transform:scale(1.045); }
+  .hero-visual .tall{height:260px;}
+  .hero-visual .short{height:146px;}
+  .hero-watermark{
+    position:absolute;
+    right:-40px; top:-60px;
+    width:220px; opacity:0.10;
+    animation: spinSlow 40s linear infinite;
+    pointer-events:none;
+  }
+
+  /* ---------- Category rail ---------- */
+  .cat-rail{
+    background:var(--paper);
+    border-bottom:1px solid rgba(28,17,22,0.08);
+    position:sticky; top:0; z-index:40;
+  }
+  .cat-rail-inner{
+    max-width:1240px; margin:0 auto;
+    display:flex; gap:10px; overflow-x:auto;
+    padding:16px 28px;
+    scrollbar-width:none;
+  }
+  .cat-rail-inner::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:none;
+    padding:9px 20px;
+    border-radius:30px;
+    border:1px solid rgba(28,17,22,0.18);
+    font-size:13.5px;
+    font-weight:500;
+    background:transparent;
+    cursor:pointer;
+    color:var(--ink);
+    transition: all .2s ease;
+    white-space:nowrap;
+    font-family:'Work Sans',sans-serif;
+  }
+  .chip:hover{border-color:var(--gold);}
+  .chip.active{
+    background:var(--plum);
+    border-color:var(--plum);
+    color:var(--paper);
+  }
+
+  /* ---------- Section header ---------- */
+  .section-head{
+    max-width:1240px; margin:0 auto;
+    padding:56px 28px 8px;
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:20px; flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:'Fraunces', serif;
+    font-size:32px;
+    font-weight:500;
+    margin:0;
+  }
+  .section-head .count{
+    font-size:13.5px;
+    color:rgba(28,17,22,0.55);
+    font-weight:500;
+  }
+
+  /* ---------- Product grid ---------- */
+  .grid{
+    max-width:1240px; margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:26px;
+    padding:24px 28px 90px;
+  }
+  .card{
+    background:#fff;
+    border:1px solid rgba(28,17,22,0.08);
+    border-radius:3px;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    transition: transform .25s ease, box-shadow .3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .card:hover{
+    box-shadow:var(--shadow);
+  }
+  .card-img{
+    position:relative;
+    aspect-ratio: 4/4.5;
+    overflow:hidden;
+    background: linear-gradient(110deg, var(--paper-dim) 8%, #f7efe0 18%, var(--paper-dim) 33%);
+    background-size: 800px 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+  .card-img img.loaded{ animation:none; }
+  .card-img::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 60%, rgba(23,11,16,0.28) 100%);
+    opacity:0; transition:opacity .3s ease;
+  }
+  .card:hover .card-img::after{ opacity:1; }
+  .card-img img{
+    width:100%; height:100%; object-fit:cover;
+    transition: transform .5s ease;
+  }
+  .card:hover .card-img img{transform:scale(1.06);}
+  .card-tag{
+    position:absolute; top:12px; left:12px;
+    background:var(--plum);
+    color:var(--gold-soft);
+    font-size:10.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:5px 11px;
+    border-radius:20px;
+    font-weight:600;
+  }
+  .card-body{
+    padding:18px 18px 20px;
+    display:flex; flex-direction:column; flex:1;
+    gap:12px;
+  }
+  .card-title{
+    font-size:15px;
+    font-weight:500;
+    line-height:1.4;
+    color:var(--ink);
+    min-height:42px;
+  }
+  .card-footer{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:auto;
+    gap:10px;
+  }
+  .shop-btn{
+    background:var(--plum);
+    color:var(--paper);
+    font-size:13px;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:2px;
+    display:inline-flex; align-items:center; gap:6px;
+    transition: background .2s ease;
+    flex:1;
+    justify-content:center;
+  }
+  .shop-btn:hover{background:var(--gold); color:var(--plum-deep);}
+  .shop-btn svg{width:13px; height:13px;}
+
+  .empty-state{
+    max-width:1240px; margin:0 auto;
+    padding:70px 28px;
+    text-align:center;
+    color:rgba(28,17,22,0.5);
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    display:none;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:var(--plum-deep);
+    color:rgba(247,240,232,0.65);
+    padding:50px 28px 30px;
+  }
+  .footer-inner{
+    max-width:1240px; margin:0 auto;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px;
+    padding-bottom:26px;
+    border-bottom:1px solid rgba(247,240,232,0.12);
+  }
+  .footer-inner .logo{color:var(--paper);}
+  .footer-note{
+    max-width:1240px; margin:22px auto 0;
+    font-size:12.5px;
+    line-height:1.7;
+    color:rgba(247,240,232,0.45);
+  }
+
+  @media (max-width: 860px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-visual{height:300px; margin-top:20px;}
+    .search-box{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="preloader">
+  <img src="images/logo.jpg" alt="Loading">
+  <div class="loader-text">Curating your edit…</div>
+</div>
+
+<div class="tagline-strip">
+  <div class="marquee-track">
+    <span>Wear. Look. Trend.</span>
+    <span>Handpicked fashion &amp; lifestyle finds</span>
+    <span>New pieces added every week</span>
+    <span>Wear. Look. Trend.</span>
+    <span>Handpicked fashion &amp; lifestyle finds</span>
+    <span>New pieces added every week</span>
+  </div>
+</div>
+
+<header id="siteHeader">
+  <div class="header-inner">
+    <div class="logo"><img class="logo-badge" src="images/logo.jpg" alt="TrendKart logo">Trend<span>Kart</span></div>
+    <nav class="nav-links">
+      <a href="#shop">Shop</a>
+      <a href="#categories">Categories</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#newsletter">Newsletter</a>
+    </nav>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search shoes, watches, ethnic wear…">
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Develop by @Khushi Yadav</div>
+      <h1>Style worth <em>clicking</em> for.</h1>
+      <p>Every piece here is one we've actually stopped to look at twice — footwear, jewelry, ethnic wear, watches and everyday finds, linked straight to where you can buy them.</p>
+      <div class="hero-ctas">
+        <a href="#shop" class="btn-primary">Shop the Edit</a>
+        <a href="#categories" class="btn-ghost">Browse Categories</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img class="hero-watermark" src="images/logo.jpg" alt="">
+      <div class="stack">
+        <img class="tall" src="images/p4.jpg" alt="Fit and flare dress">
+        <img class="short" src="images/p16.jpg" alt="Cotton kurta set">
+      </div>
+      <div class="stack">
+        <img class="short" src="images/p5.jpg" alt="Fashion watch">
+        <img class="tall" src="images/p7.jpg" alt="Lehenga set">
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-bar">
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"/></svg>
+    <div><div class="t-title">Verified Links</div><div class="t-sub">Every link checked</div></div>
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18v14H3zM3 7h18M8 21h8"/></svg>
+    <div><div class="t-title">Amazon Fulfilled</div><div class="t-sub">Trusted delivery</div></div>
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.6 6.3L21 9l-5 4.6L17.3 21 12 17.6 6.7 21 8 13.6 3 9l6.4-.7z"/></svg>
+    <div><div class="t-title">Handpicked Quality</div><div class="t-sub">Nothing random</div></div>
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 2M12 3a9 9 0 100 18 9 9 0 000-18z"/></svg>
+    <div><div class="t-title">Updated Weekly</div><div class="t-sub">New drops added</div></div>
+  </div>
+</div>
+
+<nav class="cat-rail" id="categories">
+  <div class="cat-rail-inner" id="chipRow"></div>
+</nav>
+
+<div class="section-head" id="shop">
+  <h2>The Edit</h2>
+  <div class="count" id="itemCount"></div>
+</div>
+
+<div class="grid" id="productGrid"></div>
+<div class="empty-state" id="emptyState">No pieces match that search — try another keyword.</div>
+
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-inner">
+    <div class="testi-eyebrow">What shoppers say</div>
+    <div id="testiSlides">
+      <div class="testi-slide active">
+        <p>"Found a lehenga here that I ended up wearing to my cousin's wedding — the link took me straight to checkout, no hunting around."</p>
+        <div class="who">— Priya, Delhi</div>
+      </div>
+      <div class="testi-slide">
+        <p>"I like that it's not a giant catalog — just pieces someone actually picked. Made choosing a watch so much easier."</p>
+        <div class="who">— Rohan, Noida</div>
+      </div>
+      <div class="testi-slide">
+        <p>"Ordered the travel umbrella and toiletry pouch together, both exactly as shown. Will be checking back for more."</p>
+        <div class="who">— Ananya, Lucknow</div>
+      </div>
+    </div>
+    <div class="testi-dots" id="testiDots"></div>
+  </div>
+</section>
+
+<section class="newsletter" id="newsletter">
+  <h2>Never miss a drop</h2>
+  <p>New pieces get added every week — leave your email and we'll keep you posted.</p>
+  <form class="newsletter-form" id="newsletterForm">
+    <input type="email" id="newsletterEmail" placeholder="you@example.com" required>
+    <button type="submit">Notify Me</button>
+  </form>
+  <div class="newsletter-msg" id="newsletterMsg"></div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="logo"><img class="logo-badge" src="images/logo.jpg" alt="TrendKart logo" style="animation:none;">Trend<span>Kart</span></div>
+      <p style="max-width:320px; font-size:13.5px; margin-top:12px; line-height:1.7;">A personal edit of fashion, jewelry and lifestyle products — updated as new favorites are found.</p>
+      <div class="social-row">
+        <a href="https://www.instagram.com/trend_kart0051/" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://in.pinterest.com/khushiyad152/" aria-label="Pinterest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 17c1-3 1.5-6 2-9M12 8a3 3 0 013 3c0 2-1 4-3 4"/></svg></a>
+        <a href="khushiyad152@gmail.com" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l1.4-4A8 8 0 1112 20a8 8 0 01-4-1.1L4 20z"/></svg></a>
+      </div>
+    </div>
+    <div style="font-size:13.5px; line-height:2;">
+      <div style="color:var(--gold-soft); font-weight:600; margin-bottom:6px;">Shop</div>
+      <div>Women's Fashion</div>
+      <div>Men's Fashion</div>
+      <div>Jewelry &amp; Watches</div>
+      <div>Footwear</div>
+    </div>
+    <div style="font-size:13.5px; line-height:2;">
+      <div style="color:var(--gold-soft); font-weight:600; margin-bottom:6px;">Info</div>
+      <div>All links go to Amazon.in</div>
+      <div>Prices &amp; availability may vary</div>
+    </div>
+  </div>
+  <p class="footer-note">As an Amazon Associate, TrendKart earns from qualifying purchases made through the links on this site. Product images and prices are shown at the seller's discretion and may change. &copy; 2026 TrendKart.</p>
+</footer>
+
+<button id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+const products = [
+  {name:"Vellinto Royal Look Patent Leather Boots", cat:"Men Footwear", img:"images/p1.jpg", link:"https://link.amazon/B0b7tVV7L?utm_source=Pinterest&utm_medium=organic"},
+  {name:"12-Pair Earring Set with Organizer Box", cat:"Jewelry", img:"images/p2.jpg", link:"https://link.amazon/B09S4GvRh?utm_source=Pinterest&utm_medium=organic"},
+  {name:"GRECIILOOKS Co-ord Nightwear Set for Men", cat:"Men Fashion", img:"images/p3.jpg", link:"https://link.amazon/B0clsomn5?utm_source=Pinterest&utm_medium=organic"},
+  {name:"PURVAJA Fit &amp; Flare Knee-Length Dress", cat:"Women Fashion", img:"images/p4.jpg", link:"https://link.amazon/A0czGbmqr?utm_source=Pinterest&utm_medium=organic"},
+  {name:"BOSS Chrono Olive Green Round Dial Watch", cat:"Watches", img:"images/p5.jpg", link:"https://link.amazon/B0ezAK7O7?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Clara 925 Silver Butterfly Earring &amp; Bracelet Set", cat:"Jewelry", img:"images/p6.jpg", link:"https://link.amazon/B0bbPiX5A?utm_source=Pinterest&utm_medium=organic"},
+  {name:"BIBA Girls Kalidar Printed Lehenga Set", cat:"Ethnic Wear", img:"images/p7.jpg", link:"https://link.amazon/B03vvdWqQ?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Clara 925 Silver Heart Pendant Jewelry Set", cat:"Jewelry", img:"images/p8.jpg", link:"https://link.amazon/B0aFqK7h8?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Hugo Boss Stainless Steel Analog Watch", cat:"Watches", img:"images/p9.jpg", link:"https://link.amazon/B06vZ3AdV?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Soft Sleep Eye Mask, Pack of 2", cat:"Accessories", img:"images/p10.jpg", link:"https://link.amazon/B0hUYJYa4?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Jorilis Compact Automatic Travel Umbrella", cat:"Accessories", img:"images/p11.jpg", link:"https://link.amazon/B00KpF9TC?utm_source=Pinterest&utm_medium=organic"},
+  {name:"KOBURG Lightweight Kids Sandals", cat:"Kids Footwear", img:"images/p12.jpg", link:"https://link.amazon/B0dWGF8Pp?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Wooum Travel Toiletry Pouch for Men", cat:"Men Fashion", img:"images/p13.jpg", link:"https://link.amazon/B04fRS4Ok"},
+  {name:"inulec Windproof Automatic Travel Umbrella", cat:"Accessories", img:"images/p14.jpg", link:"https://link.amazon/B02FzJvgO?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Vincent Chase by Lenskart Polarized Sunglasses", cat:"Eyewear", img:"images/p15.jpg", link:"https://link.amazon/B07ba7puX"},
+  {name:"Amayra Cotton Kurta Set with Palazzo &amp; Dupatta", cat:"Ethnic Wear", img:"images/p16.jpg", link:"https://link.amazon/B0aLLSkJO?utm_source=Pinterest&utm_medium=organic"},
+  {name:"KOTTY Wide-Leg Palazzo Trousers", cat:"Women Fashion", img:"images/p17.jpg", link:"https://link.amazon/B0aJSEPWj?utm_source=Pinterest&utm_medium=organic"},
+  {name:"Doctor Health Orthopedic Platform Slippers", cat:"Women Footwear", img:"images/p18.jpg", link:"https://link.amazon/B0dqVcUXO"}
+];
+
+const categories = ["All", ...Array.from(new Set(products.map(p=>p.cat)))];
+const chipRow = document.getElementById('chipRow');
+const grid = document.getElementById('productGrid');
+const itemCount = document.getElementById('itemCount');
+const emptyState = document.getElementById('emptyState');
+const searchInput = document.getElementById('searchInput');
+let activeCat = "All";
+
+function renderChips(){
+  chipRow.innerHTML = categories.map(c =>
+    `<button class="chip ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  chipRow.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      activeCat = chip.dataset.cat;
+      renderChips();
+      renderGrid();
+    });
+  });
+}
+
+function renderGrid(){
+  const query = searchInput.value.trim().toLowerCase();
+  const filtered = products.filter(p=>{
+    const matchesCat = activeCat === "All" || p.cat === activeCat;
+    const matchesQuery = !query || p.name.toLowerCase().includes(query) || p.cat.toLowerCase().includes(query);
+    return matchesCat && matchesQuery;
+  });
+
+  itemCount.textContent = `${filtered.length} piece${filtered.length!==1?'s':''}`;
+  emptyState.style.display = filtered.length ? 'none' : 'block';
+
+  grid.innerHTML = filtered.map((p,i) => `
+    <div class="card reveal" style="transition-delay:${(i%6)*0.06}s">
+      <div class="card-img">
+        <span class="card-tag">${p.cat}</span>
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded'); this.parentElement.style.animation='none'; this.parentElement.style.background='transparent';">
+      </div>
+      <div class="card-body">
+        <div class="card-title">${p.name}</div>
+        <div class="card-footer">
+          <a class="shop-btn" href="${p.link}" target="_blank" rel="noopener sponsored">
+            Shop Now
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  attachCardEffects();
+}
+
+function attachCardEffects(){
+  const cards = document.querySelectorAll('.card');
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+  cards.forEach(c=>io.observe(c));
+
+  // 3D tilt on hover
+  cards.forEach(card=>{
+    card.addEventListener('mousemove', (e)=>{
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rotateX = ((y / rect.height) - 0.5) * -8;
+      const rotateY = ((x / rect.width) - 0.5) * 10;
+      card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+    });
+    card.addEventListener('mouseleave', ()=>{
+      card.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+}
+
+// header shrink on scroll
+const siteHeader = document.getElementById('siteHeader');
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 40){ siteHeader.classList.add('scrolled'); }
+  else{ siteHeader.classList.remove('scrolled'); }
+  if(window.scrollY > 500){ backToTop.classList.add('show'); }
+  else{ backToTop.classList.remove('show'); }
+}, {passive:true});
+
+backToTop.addEventListener('click', ()=>{
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+// preloader
+window.addEventListener('load', ()=>{
+  const pre = document.getElementById('preloader');
+  setTimeout(()=> pre.classList.add('hide'), 500);
+});
+
+// testimonial slider
+const testiSlides = document.querySelectorAll('.testi-slide');
+const testiDots = document.getElementById('testiDots');
+let testiIndex = 0;
+testiSlides.forEach((_, i)=>{
+  const dot = document.createElement('button');
+  if(i===0) dot.classList.add('active');
+  dot.addEventListener('click', ()=> showTesti(i));
+  testiDots.appendChild(dot);
+});
+function showTesti(i){
+  testiSlides[testiIndex].classList.remove('active');
+  testiDots.children[testiIndex].classList.remove('active');
+  testiIndex = i;
+  testiSlides[testiIndex].classList.add('active');
+  testiDots.children[testiIndex].classList.add('active');
+}
+setInterval(()=>{
+  showTesti((testiIndex + 1) % testiSlides.length);
+}, 4500);
+
+// newsletter form
+const newsletterForm = document.getElementById('newsletterForm');
+const newsletterMsg = document.getElementById('newsletterMsg');
+newsletterForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const email = document.getElementById('newsletterEmail').value.trim();
+  if(email){
+    newsletterMsg.textContent = `You're on the list — we'll email ${email} when new pieces drop.`;
+    newsletterForm.reset();
+  }
+});
+
+searchInput.addEventListener('input', renderGrid);
+renderChips();
+renderGrid();
+</script>
+
+</body>
+</html>
