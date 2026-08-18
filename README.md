@@ -1,73 +1,109 @@
-# 🛍️ TrendKart
+# 🛍️ TrendKart – Online Affiliate Shopping Website
 
-> **Style worth clicking for.**
+**TrendKart** is a modern and responsive **online affiliate shopping website** that helps users discover trending products from different shopping platforms.
 
-TrendKart is a modern fashion and lifestyle discovery website featuring curated products across **Women's Fashion, Men's Fashion, Jewelry, Watches, Footwear, and Lifestyle**.
+The website provides an easy-to-use interface where users can browse products, explore categories, and visit the respective shopping platforms to purchase their favorite products.
 
-The website helps users discover trending products and access direct purchase links through Amazon.in.
+## 🚀 Features
 
----
+* 🏠 Modern and responsive homepage
+* 🛍️ Trending products section
+* 🔥 Featured products
+* 📂 Product categories
+* 🔍 Product search
+* ❤️ Wishlist UI
+* 🛒 Shopping/product interface
+* 🔗 Affiliate product links
+* 📱 Mobile-friendly responsive design
+* 🎨 Clean and modern UI
 
-## 🌐 Live Website
+## 🛠️ Technologies Used
 
-🚀 **[Visit TrendKart](https://trendkart52.netlify.app/)**
-
----
-
-## 📸 Website Preview
-
-![TrendKart Website Preview](./Screenshot%202026-08-12%20211326.png)
-
----
-
-## ✨ Features
-
-- 🛍️ Curated fashion & lifestyle products
-- 👗 Women's Fashion
-- 👔 Men's Fashion
-- 💎 Jewelry & Watches
-- 👟 Footwear
-- 🔎 Product search functionality
-- 🔗 Direct Amazon product links
-- 📱 Responsive design
-- 🎨 Modern and elegant user interface
-- ⭐ Customer reviews section
-- 📧 Newsletter subscription section
-- 📲 Instagram & Pinterest integration
-- 🖼️ Product images and TrendKart branding
-- ⬆️ Smooth navigation and back-to-top functionality
-
----
-
-## 🛠️ Tech Stack
-
-| Technology | Usage |
-|------------|-------|
-| HTML5 | Website structure |
-| CSS3 | Styling & responsive design |
-| JavaScript | Interactions & functionality |
-| Git | Version control |
-| GitHub | Source code hosting |
-| Netlify | Website deployment |
-
----
+* **React.js**
+* **JavaScript (ES6+)**
+* **HTML5**
+* **CSS3**
+* **Vite**
+* **React Hooks**
 
 ## 📂 Project Structure
 
 ```text
 TrendKart/
 │
+├── public/
+├── src/
+│   ├── components/
+│   ├── assets/
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── App.css
+│
+├── package.json
 ├── index.html
-│
-├── images/
-│   ├── logo.jpg
-│   ├── p1.jpg
-│   ├── p2.jpg
-│   ├── p3.jpg
-│   ├── p4.jpg
-│   ├── p5.jpg
-│   └── ...
-│
-├── Screenshot 2026-08-12 211326.png
-│
 └── README.md
+```
+
+## 💻 Getting Started
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/your-username/trendkart.git
+```
+
+### Navigate to the Project
+
+```bash
+cd trendkart
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Run the Development Server
+
+```bash
+npm run dev
+```
+
+Open the local URL displayed in the terminal to view the website.
+
+## 🎯 Project Objective
+
+The goal of TrendKart is to create a **user-friendly affiliate shopping platform** where users can discover popular and trending products in one place.
+
+This project also helped in practicing:
+
+* React component development
+* State management
+* Dynamic product rendering
+* Responsive web design
+* Search and filtering
+* API/data integration
+* Affiliate link integration
+* Modern UI/UX development
+
+## 🔮 Future Improvements
+
+* 🔐 User authentication
+* 💳 Secure payment integration
+* 🗄️ Backend and database integration
+* 📊 Product analytics
+* ⭐ Product reviews and ratings
+* 🔔 Price-drop notifications
+* 🤖 AI-based product recommendations
+* 🔎 Advanced filtering and sorting
+* 🌙 Dark mode
+
+
+
+**Sanjana Kumari**
+
+
+---
+
+⭐ If you like **TrendKart**, don't forget to give the repository a star!
